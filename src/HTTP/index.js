@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 let HTTP = axios.create({
-    baseURL: 'http://localhost:8001/api/',
+    process.env.VUE_APP_ROOT_API + '/api/',
     Authorization: undefined,
     headers: {
         'Access-Control-Allow-Origin': '*'
