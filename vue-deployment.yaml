@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cancer-ui
+  namespace: rclone
+  labels:
+    app: cancer-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cancer-ui
+  template:
+    metadata:
+      labels:
+        app: cancer-ui
+    spec:
+      containers:
+      - name: cancer-ui
+        imagePullPolicy: Always
+        image: eu.gcr.io/sap-p-and-i-big-data-vora/cancer-ui:50381134294e
+        ports:
+        - containerPort: 8080
