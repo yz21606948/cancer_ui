@@ -1,8 +1,8 @@
 <template>
   <span>
-    <v-container class="content">
+    <v-container class="content mb-3 pb-3">
       <v-layout row wrap>
-        <v-flex sm12 class="component_margin">
+        <v-flex class="mt-6 sm12">
           <v-card color="blue-grey darken-1" dark :loading="isUpdating" class="mx-auto" max-width="1200">  
             <v-img height="200" src="https://cdn.vuetifyjs.com/images/cards/dark-beach.jpg">
               <v-row class="pa-4" align="center" justify="center">
@@ -39,6 +39,7 @@
                       </template>
                     </v-autocomplete>
                   </v-col>
+                  
                   <v-col cols="12" v-show="cancer.gene_list">
                     <v-autocomplete v-model="cancer.gene" :items="cancer.gene_list" filled chips color="blue-grey lighten-2" label="基因检测" item-text="name" item-value="name" multiple>
                       <template v-slot:selection="data">
@@ -80,6 +81,7 @@
                     </v-autocomplete>
                   </v-col>
                   <v-col col="12" v-show="cancer.menopause_show">
+                    <header>是否绝经</header>
                     <v-radio-group v-model="cancer.menopause" row>
                       <v-radio label="是" value="1"></v-radio>
                       <v-radio label="否" value="0"></v-radio>
@@ -101,7 +103,7 @@
           </v-card>
         </v-flex>
         <v-container fluid v-show="projects">
-          <v-flex sm12 class="component_margin" v-for="(item, index) in projects" :key="index">
+          <v-flex class="mt-6 sm12" v-for="(item, index) in projects" :key="index">
             <project-detail :description="item.description" :category="item.category_L1" :person="item.person_in_charge" :exclusion="item.exclusion"></project-detail>
           </v-flex>
         </v-container>
@@ -234,7 +236,7 @@
   width: 100%;
 }
 .main {
-  margin-top: 25px;
+  margin-top: 25;
 }
 .component_margin {
   margin: 60px;

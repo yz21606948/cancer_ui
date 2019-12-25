@@ -1,7 +1,7 @@
 <template>
-  <v-app application--light class="wrapper">
+  <v-app application--light class="wrapper mb-6">
     <app-header></app-header>
-    <div class="content">
+    <div class="content mb-3 pb-3">
       <router-view></router-view>
     </div>
     <app-footer></app-footer>
@@ -32,14 +32,11 @@ body {
 }
 .wrapper {
   min-height:100%;
-  /*margin-bottom: 30px;*/
 }
 .content {
   width: 100%;
   min-height:100%;
   position: relative;
-  margin-bottom: 30px;
-  padding-bottom: 30px;
 }
 
 .rigth {
@@ -52,10 +49,3 @@ body {
 
 </style>
 
-<style scoped>
-@media only screen and (min-width: 600px) {
-  .container {
-      max-width: 1024px;
-  }
-}  
-</style>
