@@ -34,7 +34,6 @@ body {
   min-height:100%;
 }
 .content {
-  width: 100%;
   min-height:100%;
   position: relative;
 }

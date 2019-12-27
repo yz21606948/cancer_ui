@@ -1,113 +1,57 @@
 <template>
   <span>
     <v-container class="content mb-3 pb-3">
-      <v-layout row wrap>
-        <v-flex class="mt-6 sm12">
-          <v-card color="blue-grey darken-1" dark :loading="isUpdating" class="mx-auto" max-width="1200">  
-            <v-img height="200" src="https://cdn.vuetifyjs.com/images/cards/dark-beach.jpg">
-              <v-row class="pa-4" align="center" justify="center">
-                <v-col class="text-center">
-                  <h3 class="headline">病种选择</h3>
-                  <span class="grey--text text--lighten-1">请输入病种，并按回车结束进入搜素详情</span>
-                </v-col>
-              </v-row>
-            </v-img>
-            <v-form>
-              <v-container>
-                <v-row>
-                  <v-col col="12">
-                    <v-autocomplete v-model="cancer_id" :items="cancer_id_list" filled chips color="blue-grey lighten-2" label="病种选择" item-text="name" item-value="id" @change='getCancerDetail'>
-                    </v-autocomplete>
-                  </v-col>
-                  <v-col cols="12" v-show="cancer.cancer_properties_list">
-                    <v-autocomplete v-model="cancer.cancer_properties" :items="cancer.cancer_properties_list" filled chips color="blue-grey lighten-2" label="病种描述" item-text="name" item-value="name" multiple>
-                      <template v-slot:selection="data">
-                        <v-chip v-bind="data.attrs" :input-value="data.selected" close @click="data.select" @click:close="remove_properties(data.item)">
-                          {{ data.item.name }}
-                        </v-chip>
-                      </template>
-                      <template v-slot:item="data">
-                        <template v-if="typeof data.item !== 'object'">
-                          <v-list-item-content v-text="data.item"></v-list-item-content>
-                        </template>
-                        <template v-else>
-                          <v-list-item-content>
-                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                            <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                          </v-list-item-content>
-                        </template>
-                      </template>
-                    </v-autocomplete>
-                  </v-col>
-                  
-                  <v-col cols="12" v-show="cancer.gene_list">
-                    <v-autocomplete v-model="cancer.gene" :items="cancer.gene_list" filled chips color="blue-grey lighten-2" label="基因检测" item-text="name" item-value="name" multiple>
-                      <template v-slot:selection="data">
-                        <v-chip v-bind="data.attrs" :input-value="data.selected" close @click="data.select" @click:close="remove_gene(data.item)">
-                          {{ data.item.name }}
-                        </v-chip>
-                      </template>
-                      <template v-slot:item="data">
-                        <template v-if="typeof data.item !== 'object'">
-                          <v-list-item-content v-text="data.item"></v-list-item-content>
-                        </template>
-                        <template v-else>
-                          <v-list-item-content>
-                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                            <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                          </v-list-item-content>
-                        </template>
-                      </template>
-                    </v-autocomplete>
-                  </v-col>
-                  <v-col cols="12" v-show="cancer.treated_history_list">
-                    <v-autocomplete v-model="cancer.treated_history" :items="cancer.treated_history_list" filled chips color="blue-grey lighten-2" label="既往治疗" item-text="name" item-value="name" multiple>
-                      <template v-slot:selection="data">
-                        <v-chip v-bind="data.attrs" :input-value="data.selected" close @click="data.select" @click:close="remove_treated_history(data.item)">
-                          {{ data.item.name }}
-                        </v-chip>
-                      </template>
-                      <template v-slot:item="data">
-                        <template v-if="typeof data.item !== 'object'">
-                          <v-list-item-content v-text="data.item"></v-list-item-content>
-                        </template>
-                        <template v-else>
-                          <v-list-item-content>
-                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                            <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                          </v-list-item-content>
-                        </template>
-                      </template>
-                    </v-autocomplete>
-                  </v-col>
-                  <v-col col="12" v-show="cancer.menopause_show">
-                    <header>是否绝经</header>
-                    <v-radio-group v-model="cancer.menopause" row>
-                      <v-radio label="是" value="1"></v-radio>
-                      <v-radio label="否" value="0"></v-radio>
-                    </v-radio-group>
-                  </v-col>
-                  <v-col col="12" v-show="cancer.treated_num_show">
-                    <v-select :items="treated_num_list" label="既往治疗次数" filled v-model="cancer.treated_num"></v-select>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-form>
-            <v-divider></v-divider>
-            <v-card-actions v-show="cancer_id">
-              <v-spacer></v-spacer>
-              <v-btn :loading="isUpdating" color="blue-grey darken-3" depressed @click="search_projects">
-                提交
-              </v-btn>
-            </v-card-actions> 
-          </v-card>
-        </v-flex>
-        <v-container fluid v-show="projects">
-          <v-flex class="mt-6 sm12" v-for="(item, index) in projects" :key="index">
-            <project-detail :description="item.description" :category="item.category_L1" :person="item.person_in_charge" :exclusion="item.exclusion"></project-detail>
-          </v-flex>
-        </v-container>
-      </v-layout>
+      <v-flex class="mt-6 sm12">
+        <v-card color="blue-grey darken-1" dark :loading="isUpdating" class="mx-auto" max-width="1200">  
+          <v-img height="200" src="https://cdn.vuetifyjs.com/images/cards/dark-beach.jpg">
+            <v-row class="pa-4" align="center" justify="center">
+              <v-col class="text-center">
+                <h3 class="headline">病种选择</h3>
+                <span class="grey--text text--lighten-1">请输入病种，并按回车结束进入搜素详情</span>
+              </v-col>
+            </v-row>
+          </v-img>
+          <v-form>
+            <v-row>
+              <v-col col="12">
+                <v-autocomplete v-model="cancer_id" :items="cancer_id_list" filled chips color="blue-grey lighten-2" label="病种选择" item-text="name" item-value="id" @change='getCancerDetail'>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" v-show="cancer.cancer_properties_list">
+                <v-combobox v-model="cancer.cancer_properties" :items="cancer.cancer_properties_list" filled chips color="blue-grey lighten-2" label="病种描述" multiple>
+                </v-combobox>
+              </v-col>
+              <v-col cols="12" v-show="cancer.gene_list">
+                <v-combobox v-model="cancer.gene" :items="cancer.gene_list" filled chips color="blue-grey lighten-2" label="基因检测" multiple>
+                </v-combobox>
+              </v-col>
+              <v-col cols="12" v-show="cancer.treated_history_list">
+                <v-combobox v-model="cancer.treated_history" :items="cancer.treated_history_list" filled chips color="blue-grey lighten-2" label="既往治疗" multiple>
+                </v-combobox>
+              </v-col>
+              <v-col col="12" v-show="cancer.menopause_show">
+                <v-radio-group v-model="cancer.menopause" row class="ml-3">
+                  <v-radio label="已经绝经" value="1"></v-radio>
+                  <v-radio label="尚未绝经" value="0"></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col col="12" v-show="cancer.treated_num_show">
+                <v-select :items="treated_num_list" label="既往治疗次数" filled v-model="cancer.treated_num"></v-select>
+              </v-col>
+            </v-row>
+          </v-form>
+          <v-divider></v-divider>
+          <v-card-actions v-show="cancer_id">
+            <v-spacer></v-spacer>
+            <v-btn :loading="isUpdating" color="blue-grey darken-3" depressed @click="search_projects">
+              提交
+            </v-btn>
+          </v-card-actions> 
+        </v-card>
+      </v-flex>
+        <v-flex class="mt-6 sm12" v-for="(item, index) in projects" :key="index">
+          <project-detail :description="item.description" :category="item.category_L1" :person="item.person_in_charge" :exclusion="item.exclusion"></project-detail>
+      </v-flex>
     </v-container>
   </span>
 </template>
@@ -154,18 +98,6 @@
     },
 
     methods: {
-      remove_properties (item) {
-        const index = this.cancer.cancer_properties.indexOf(item.name)
-        if (index >= 0) this.cancer.cancer_properties.splice(index, 1)
-      },
-      remove_gene(item) {
-        const index = this.cancer.gene.indexOf(item.name)
-        if (index >= 0) this.cancer.gene.splice(index, 1)
-      },
-      remove_treated_history(item) {
-        const index = this.cancer.treated_history.indexOf(item.name)
-        if (index >= 0) this.cancer.treated_history.splice(index, 1)
-      },
       getCancerDetail(){
         this.cancer = helper.initCancerDetail()
         HTTP.get('cancer/' + this.cancer_id)
@@ -238,7 +170,5 @@
 .main {
   margin-top: 25;
 }
-.component_margin {
-  margin: 60px;
-}
+
 </style>
