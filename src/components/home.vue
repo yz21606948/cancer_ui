@@ -49,9 +49,13 @@
           </v-card-actions> 
         </v-card>
       </v-flex>
-        <v-flex class="mt-6 sm12" v-for="(item, index) in projects" :key="index">
-          <project-detail :description="item.description" :category="item.category_L1" :person="item.person_in_charge" :exclusion="item.exclusion"></project-detail>
+      <v-flex class="mt-6 sm12" v-for="(item, index) in current_projects" :key="index">
+        <project-detail :description="item.description" :category="item.category_L1" :person="item.person_in_charge" :exclusion="item.exclusion"></project-detail>
       </v-flex>
+      <div class="text-center mt-4">
+        <v-pagination v-model="page" :length="page_lengths" v-show="projects">
+        </v-pagination>        
+      </div>
     </v-container>
   </span>
 </template>
@@ -82,10 +86,14 @@
           treated_num_show: false
         },
         projects: null,
+        current_projects: [],
         isUpdating: false,
         cancer_id_list: [],
         treated_num_list:[0,1,2,3,4,5,6,7,8,9],
-        title: 'The summer breeze'
+        page: 1,
+        per_page: 2,
+        page_lengths: 0
+
       }
     },
 
@@ -95,6 +103,22 @@
           setTimeout(() => (this.isUpdating = false), 3000)
         }
       },
+      page (val) {
+        if (val) {
+          this.current_projects = []
+          if (val * this.per_page > this.projects.length) {
+            for (var i = (val-1) * this.per_page; i < this.projects.length; i++) 
+            {
+              this.current_projects.push(this.projects[i])
+            }
+          }else{
+            for (var j = (val-1) * this.per_page; j < val * this.per_page; j++) 
+            {
+              this.current_projects.push(this.projects[j])
+            }
+          }
+        }
+      }
     },
 
     methods: {
@@ -141,8 +165,12 @@
         HTTP.post(api_url, search_fitlers)
         .then(response => {
           this.projects = response.data
+          this.page_lengths = Math.ceil(this.projects.length/2)
+          for (var i = 0; i < this.per_page; i++) {
+            this.current_projects.push(this.projects[i])
+          }
         })
-      }
+      },
     },
     created () {
       HTTP.get('cancer')
